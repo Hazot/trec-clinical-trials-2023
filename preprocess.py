@@ -1,3 +1,4 @@
+import logging
 import xml.etree.ElementTree as ET
 import os
 
@@ -9,8 +10,9 @@ def parse_xml(file_path):
 
     # Store tags and their subtags
     tags = [
-        'link_text',
-        'url',
+        'required_header',
+        # 'link_text',
+        # 'url',
         'id_info',
         'brief_title',
         'sponsors',
@@ -35,11 +37,14 @@ def parse_xml(file_path):
 def extract_data(element, tag):
     data = []
 
-    for child in element.iter(tag):
-        content = extract_content(child)
-        data.append(content)
+    try:
+        for child in element.iter(tag):
+            content = extract_content(child)
+            data.append(content)
 
-    return data if len(data) > 1 else data[0]
+        return data if len(data) > 1 else data[0]
+    except:
+        return None
 
 def extract_content(element):
     if len(element) > 0:
@@ -51,6 +56,10 @@ def extract_content(element):
 
     return content
 
+def preprocess_all_documents(logger: logging.Logger):
+    return None
+
+
 if __name__ == '__main__':
     # Specify the path to your XML file
     # file_path = os.path.normpath(os.path.abspath() + '/data/raw/ClinicalTrials.2023-05-08.trials0/NCT0000xxxx/NCT00000102.xml')
@@ -60,5 +69,8 @@ if __name__ == '__main__':
     parsed_data = parse_xml(file_path)
 
     # Print the dictionary containing the parsed data
+    print(json.dump)
     for key, value in parsed_data.items():
         print(f"{key}: {value}")
+    # logger = logging.getLogger(__name__)
+    # preprocess_all_documents(logger)
