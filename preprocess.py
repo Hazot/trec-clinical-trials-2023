@@ -1,6 +1,10 @@
+import json
 import logging
 import xml.etree.ElementTree as ET
 import os
+import pandas as pd
+from tqdm import tqdm
+
 
 def parse_xml(file_path):
     tree = ET.parse(file_path)
@@ -10,9 +14,9 @@ def parse_xml(file_path):
 
     # Store tags and their subtags
     tags = [
-        'required_header',
-        # 'link_text',
-        # 'url',
+        'nct_id',
+        'link_text',
+        'url',
         'id_info',
         'brief_title',
         'sponsors',
@@ -34,6 +38,7 @@ def parse_xml(file_path):
 
     return data
 
+
 def extract_data(element, tag):
     data = []
 
@@ -41,10 +46,10 @@ def extract_data(element, tag):
         for child in element.iter(tag):
             content = extract_content(child)
             data.append(content)
-
         return data if len(data) > 1 else data[0]
     except:
         return None
+
 
 def extract_content(element):
     if len(element) > 0:
@@ -56,21 +61,57 @@ def extract_content(element):
 
     return content
 
-def preprocess_all_documents(logger: logging.Logger):
+
+def get_file_names(raw_data_folder_path):
+    file_paths = []
+    for splits in os.scandir(raw_data_folder_path):
+        if splits.is_dir():
+            for nct_dir in os.scandir(splits.path):
+                for file in os.scandir(nct_dir.path):
+                    if file.is_file():
+                        file_paths.append(file.path)
+    return file_paths
+
+
+def preprocess_all_documents(raw_data_folder_path, output_path):
+    file_paths = get_file_names(raw_data_folder_path)
+
+    # df = pd.DataFrame()
+    # for file_path in tqdm(file_paths):
+    #     parsed_data = parse_xml(file_path)
+    #
+    #     df = df._append(parsed_data, ignore_index=True)
+
+    dictionary_list = []
+    for file_path in tqdm(file_paths):
+        parsed_data = parse_xml(file_path)
+        dictionary_list.append(parsed_data)
+
+    df = pd.DataFrame.from_dict(dictionary_list)
+
+
+    with open(output_path, 'w', encoding='utf-8') as file:
+        json.dump(df.to_dict(), file, ensure_ascii=False, indent=4)
+
     return None
 
 
 if __name__ == '__main__':
-    # Specify the path to your XML file
-    # file_path = os.path.normpath(os.path.abspath() + '/data/raw/ClinicalTrials.2023-05-08.trials0/NCT0000xxxx/NCT00000102.xml')
-    file_path = os.path.normpath(os.getcwd() + '/data/raw/ClinicalTrials.2023-05-08.trials0/NCT0000xxxx/NCT00000102.xml')
-    print(file_path)
-    # Parse the XML file and store the data in a dictionary
-    parsed_data = parse_xml(file_path)
 
+    # Specify the path to your XML file
+    raw_data_folder_path = os.path.normpath(os.getcwd() + '/data/raw/')
+    output_path = os.path.normpath(os.getcwd() + '/data/processed/data.json')
+
+    ###
+    # TEST: Parse the XML file and store the data in a dictionary
+    file_path = os.path.normpath(os.getcwd() + '/data/raw/ClinicalTrials.2023-05-08.trials0/NCT0000xxxx/NCT00000102.xml')
+    parsed_data_test = parse_xml(file_path)
     # Print the dictionary containing the parsed data
-    print(json.dump)
-    for key, value in parsed_data.items():
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump({}, f, ensure_ascii=False, indent=4)
+    for key, value in parsed_data_test.items():
         print(f"{key}: {value}")
-    # logger = logging.getLogger(__name__)
-    # preprocess_all_documents(logger)
+    ###
+
+    preprocess_all_documents(raw_data_folder_path, output_path)
+    print('Done')
