@@ -1,5 +1,4 @@
 import json
-import logging
 import xml.etree.ElementTree as ET
 import os
 import pandas as pd
@@ -56,8 +55,11 @@ def extract_content(element):
         content = {}
         for child in element:
             content[child.tag] = extract_content(child)
+        if content.get('textblock', None):
+            content = content[list(content.keys())[0]]
     else:
-        content = element.text.strip()
+        # content = ' '.join(element.text.strip().split())
+        content = ' '.join(element.text.strip().split()).replace(': ', ' ').replace(' - ', ' ')  # Remove unnecessary characters
 
     return content
 
@@ -76,18 +78,12 @@ def get_file_names(raw_data_folder_path):
 def preprocess_all_documents(raw_data_folder_path, output_path):
     file_paths = get_file_names(raw_data_folder_path)
 
-    # df = pd.DataFrame()
-    # for file_path in tqdm(file_paths):
-    #     parsed_data = parse_xml(file_path)
-    #
-    #     df = df._append(parsed_data, ignore_index=True)
-
-    dictionary_list = []
-    for file_path in tqdm(file_paths):
+    dict_list = []
+    for file_path in tqdm(file_paths, desc='Parsing XML files to json:', disable=False, position=0, leave=True):
         parsed_data = parse_xml(file_path)
-        dictionary_list.append(parsed_data)
+        dict_list.append(parsed_data)
 
-    df = pd.DataFrame.from_dict(dictionary_list)
+    df = pd.DataFrame.from_dict(dict_list)
 
 
     with open(output_path, 'w', encoding='utf-8') as file:
@@ -115,3 +111,4 @@ if __name__ == '__main__':
 
     preprocess_all_documents(raw_data_folder_path, output_path)
     print('Done')
+    print('Output path: ' + output_path)

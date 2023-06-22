@@ -1,0 +1,4 @@
+TOPIC_NO Q0 ID RANK SCORE RUN_NAME
+1 Q0 NCT00760162 1 0.9999 my-run
+
+"The above line indicates that the run named "my-run" retrieves for topic number 1 document NCT00760162 at rank 1 with a score of 0.9999."
