@@ -58,7 +58,6 @@ def extract_content(element):
         if content.get('textblock', None):
             content = content[list(content.keys())[0]]
     else:
-        # content = ' '.join(element.text.strip().split())
         content = ' '.join(element.text.strip().split()).replace(': ', ' ').replace(' - ', ' ')  # Remove unnecessary characters
 
     return content
