@@ -1,5 +1,6 @@
 # User and project specific files
-data/
+data/raw
+data/processed
 
 
 ### PyCharm ###
