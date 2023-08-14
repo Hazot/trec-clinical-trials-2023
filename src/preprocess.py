@@ -94,12 +94,12 @@ def preprocess_all_documents(raw_data_folder_path, output_path):
 if __name__ == '__main__':
 
     # Specify the path to your XML file
-    raw_data_folder_path = os.path.normpath(os.getcwd() + '/data/raw/')
-    output_path = os.path.normpath(os.getcwd() + '/data/processed/data.json')
+    raw_data_folder_path = os.path.normpath(os.getcwd() + '/..' + '/data/raw/')
+    output_path = os.path.normpath(os.getcwd() + '/..' + '/data/processed/data.json')
 
     ###
     # TEST: Parse the XML file and store the data in a dictionary
-    file_path = os.path.normpath(os.getcwd() + '/data/raw/ClinicalTrials.2023-05-08.trials0/NCT0000xxxx/NCT00000102.xml')
+    file_path = os.path.normpath(os.getcwd()  + '/..' + '/data/raw/ClinicalTrials.2023-05-08.trials0/NCT0000xxxx/NCT00000102.xml')
     parsed_data_test = parse_xml(file_path)
     # Print the dictionary containing the parsed data
     with open(output_path, 'w', encoding='utf-8') as f:
