@@ -1,6 +1,7 @@
 tqdm
 pandas
 datasets
+chardet
 transformers
 torch
 pytorch_lightning
