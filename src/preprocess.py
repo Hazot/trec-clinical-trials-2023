@@ -73,6 +73,22 @@ def get_file_names(raw_data_folder_path):
                         file_paths.append(file.path)
     return file_paths
 
+def find_xml_without_eligibility_tag(data_dir = 'data/raw'):
+    """
+    Find all the XML files without eligibility tag in TREC 2023 CT
+    """
+    xml_files = get_file_names(data_dir)
+    xml_withuot_eligibility = set()
+    for xml_file in xml_files:
+        tree = ET.parse(xml_file)
+        root = tree.getroot()
+
+        # Check if <eligibility> tag exists as an immediate child of root
+        eligibility_tag = root.find('eligibility')
+        if not eligibility_tag:
+            xml_withuot_eligibility.add(xml_file)
+    return list(xml_withuot_eligibility)
+
 
 def preprocess_all_documents(raw_data_folder_path, output_path):
     file_paths = get_file_names(raw_data_folder_path)
