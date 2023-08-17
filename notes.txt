@@ -1,0 +1,31 @@
+
+
+Could you find out the number of files without anything in <criteria> or <condition>, or missing both tags?
+
+eligibility description have any patern?
+
+Tags analysis:
+- condition (as inclusion criteria)
+
+Analysis done after preprocessing
+Findings:
+- 75 without <criteria>
+- 1093 with at least 1 to 5 words in <criteria>
+- 10323 without 'inclusion' in <criteria>
+- 16192 without 'exclusion' in <criteria>
+- 17022 without at least one of them in <criteria>
+- 16994 without at least one of them in <eligibility>
+
+Notes:
+- 'inclusion' and 'exclusion' can appear in <study_pop> instead of <criteria> (NCT02450916). Sometimes it also happens in both (NCT03962699). Sometimes, it is repeated in both (NCT03437486).
+- some have only bullet points: which can then be translated as being only inclusion criterias (NCT05208463)
+- some have other structures, more than 6300 of them: 'disease characteristics' (NCT00640081)
+- some of them have 'following criteria apply:' (NCT03809481)
+- inclusion synonyms: 'Eligibility Requirements' (NCT05026580), 
+- exclusion synonyms: 'Non Inclusion' (NCT02841670),
+- Sometimes there are time-based criterias 'Individuals meeting the following criteria between January 1, 2015 and December 31, 2021' (NCT05161429)
+- when there are low amount of words in <criteria>, most of the time they are inclusion criterias written as bullet points (NCT00063505, NCT00060827)
+- sometimes they are very long and unstructured but full sentences (NCT03323151), needing an LLM to decipher it
+
+
+
